@@ -1,0 +1,13 @@
+alembic
+Flask
+Flask-Cors
+Flask-Migrate
+flask-moment
+Flask-RESTful
+Flask-SQLAlchemy
+flask-wtf
+psycopg2
+python-dateutil
+python-jose-cryptodome
+SQLAlchemy
+Werkzeug
