@@ -55,7 +55,7 @@ def create_app(test_config=None):
   @app.route('/actors', methods=['POST'])
   def add_actor():
     '''
-    POST endpoint to craete new actors which require actor name, age and gender
+    POST endpoint to craete new actors which require actor name, age and gender 
     '''
     
     body = request.get_json()
@@ -101,13 +101,15 @@ def create_app(test_config=None):
     @app.route('/movies', methods=['POST'])
     def add_movie():
       '''
-      POST endpoint to craete new movies which require movie title and release year
+      POST endpoint to craete new movies which require movie title , release year and main actor
       '''
       
       body = request.get_json()
 
       title = body.get('title')
       release = body.get('release')
+      actor = body.getlist('actor')
+
 
       if (title == ''):
         abort(422)

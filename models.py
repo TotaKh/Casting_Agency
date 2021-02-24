@@ -1,10 +1,12 @@
 import os
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Integer, ForeignKey, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
 
-database_path = os.environ['DATABASE_URL']
+# gh jksd jpctd vh 
+#database_path = os.environ['DATABASE_URL']
+database_path='postgresql://taghreed:122333@localhost:5432/Casting_Agency'
 
 db = SQLAlchemy()
 
@@ -31,11 +33,12 @@ class Movies(db.Model):
   id = Column(Integer, primary_key=True)
   title = Column(String)
   release = Column(String)
-  #actors = Column(String)
+  actor = Column(String , ForeignKey('actors.name'))
 
-  def __init__(self, title, release ):
+  def __init__(self, title, release ,actor='' ):
     self.title = title
     self.release = release
+    self.actor = actor
 
   def insert(self):
     db.session.add(self)
@@ -65,9 +68,10 @@ class Actors(db.Model):
   __tablename__ = 'actors'
 
   id = Column(Integer, primary_key=True)
-  name = Column(String)
-  age = Column(String)
+  name = Column(String , unique=True)
+  age = Column(Integer)
   gender = Column(String)
+  movie = db.relationship('Movies' , backref='movie', lazy=True)
 
   def __init__(self, name, age,gender ):
     self.name = name
