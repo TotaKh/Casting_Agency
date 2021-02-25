@@ -56,8 +56,9 @@ class Movies(db.Model):
     return {
       'id': self.id,
       'title': self.title,
-      'release': self.release
-      }
+      'release': self.release,
+      'actor':self.actor
+    }
 
 
 '''

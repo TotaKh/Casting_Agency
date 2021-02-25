@@ -5,7 +5,9 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
 from models import setup_db, Actors, Movies
+from auth import AuthError, requires_auth
 
 
 #----------------------------------------------------------------------------#
@@ -37,7 +39,8 @@ def create_app(test_config=None):
   # Actors endpoint
 
   @app.route('/actors', methods=['GET'])
-  def get_actors():
+  @requires_auth('get:actor')
+  def get_actors(jwt):
     ''' 
     GET for all available Actors
     '''
@@ -53,7 +56,8 @@ def create_app(test_config=None):
   
 
   @app.route('/actors', methods=['POST'])
-  def add_actor():
+  @requires_auth('post:actor')
+  def add_actor(jwt):
     '''
     POST endpoint to craete new actors which require actor name, age and gender 
     '''
@@ -80,8 +84,8 @@ def create_app(test_config=None):
 
   
   @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-  #@requires_auth('patch:drinks')
-  def update_actor(actor_id):
+  @requires_auth('patch:actor')
+  def update_actor(jwt, actor_id):
 
     body = request.get_json()
     name = body.get('name')
@@ -109,7 +113,8 @@ def create_app(test_config=None):
 
 
   @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-  def delete_actor(actor_id):
+  @requires_auth('delete:actor')
+  def delete_actor(jwt, actor_id):
     '''
     An endpoint to DELETE actor using ID. 
     '''
@@ -125,11 +130,12 @@ def create_app(test_config=None):
     })
 
 
-  #---------------
+  #-----------------
   # Movies endpoint
 
   @app.route('/movies', methods=['GET'])
-  def get_movies():
+  @requires_auth('get:movie')
+  def get_movies(jwt):
     ''' 
     GET for all available Movies
     '''
@@ -140,68 +146,70 @@ def create_app(test_config=None):
     
     return jsonify({
       'success': True,
-      'movies': [movies.format() for movie in movies]
+      'movies': [movie.format() for movie in movies]
     })  
 
 
-    @app.route('/movies', methods=['POST'])
-    def add_movie():
-      '''
-      POST endpoint to craete new movies which require movie title , release year and main actor
-      '''
-      body = request.get_json()
-      title = body.get('title')
-      release = body.get('release')
-      actor = body.getlist('actor')
+  @app.route('/movies', methods=['POST'])
+  @requires_auth('post:movie')
+  def add_movie(jwt):
+    '''
+    POST endpoint to craete new movies which require movie title , release year and main actor
+    '''
+    body = request.get_json()
+    title = body.get('title')
+    release = body.get('release')
+    actor = body.get('actor')
 
 
-      if (title == ''):
-        abort(422)
+    if (title == ''):
+      abort(422)
 
-      try:
-        movie = Actors(title=title, release=release)
-        movie.insert()
+    try:
+      movie = Movies(title=title, release=release, actor=actor)
+      movie.insert()
 
-        return jsonify({
-          'success': True,
-          'created': movie.id,
-        })
+      return jsonify({
+        'success': True,
+        'created': movie.id,
+      })
 
-      except:
-        abort(422)
+    except:
+      abort(422)
 
 
   @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    #@requires_auth('patch:drinks')
-    def update_movie(movie_id):
+  @requires_auth('patch:movie')
+  def update_movie(jwt, movie_id):
 
-      body = request.get_json()
-      title = body.get('title')
-      release = body.get('release')
-      actor = body.getlist('actor')
+    body = request.get_json()
+    title = body.get('title')
+    release = body.get('release')
+    actor = body.get('actor')
 
-      movie = Movies.query.filter(Movies.id == movie_id).one_or_none()
+    movie = Movies.query.filter(Movies.id == movie_id).one_or_none()
 
-      if movie is None:
-        abort(404)
+    if movie is None:
+      abort(404)
 
-      try:
-        movie.title = title
-        movie.release = release
-        movie.actor = actor
-        movie.update()
+    try:
+      movie.title = title
+      movie.release = release
+      movie.actor = actor
+      movie.update()
 
-        return jsonify({
-            "success": True,
-            "movie": [movie.format()]
-          })
+      return jsonify({
+          "success": True,
+          "movie": [movie.format()]
+        })
 
-      except:
-        abort(422)
+    except:
+      abort(422)
 
 
   @app.route('/actors/<int:movie_id>', methods=['DELETE'])
-  def delete_movie(actor_id):
+  @requires_auth('delete:movie')
+  def delete_movie(jwt, actor_id):
     '''
     An endpoint to DELETE movie using ID. 
     '''
@@ -252,15 +260,27 @@ def create_app(test_config=None):
       'message': "unprocessable"
     }),422
 
-    @app.errorhandler(500)
-    def exception_handler(error):
-      return jsonify({
-        'success': False,
-        'error': 500,
-        'message': "internal server error"
-      }), 500
+  @app.errorhandler(500)
+  def exception_handler(error):
+    return jsonify({
+      'success': False,
+      'error': 500,
+      'message': "internal server error"
+    }), 500
+
+  
+  #error handler for AuthError to conform to general task above
+  @app.errorhandler(AuthError)
+  def not_authenticated(auth_error):
+    return jsonify({
+      "success": False,
+      "error": auth_error.status_code,
+      "message": auth_error.error
+    }), 401
+
 
   return app
+
 
 app = create_app()
 
@@ -280,13 +300,17 @@ if __name__ == '__main__':
 # POST /actors and /movies and
 # PATCH /actors/ and /movies/
 
+
 # Roles:
+
 # Casting Assistant
-# Can view actors and movies
+# Can view actors and movies (get:actor , get:movie)
+
 # Casting Director
 # All permissions a Casting Assistant has and…
-# Add or delete an actor from the database
-# Modify actors or movies
+# Add or delete an actor from the database (post:actor , delete:actor)
+# Modify actors or movies (patch:actor , patch:movie)
+
 # Executive Producer
-# All permissions a Casting Director has and…
-# Add or delete a movie from the database
+# All permissions a Casting Director has and… 
+# Add or delete a movie from the database (post:movie , delete:movie)
