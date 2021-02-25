@@ -57,7 +57,6 @@ def create_app(test_config=None):
     '''
     POST endpoint to craete new actors which require actor name, age and gender 
     '''
-    
     body = request.get_json()
 
     name = body.get('name')
@@ -78,6 +77,53 @@ def create_app(test_config=None):
 
     except:
       abort(422)
+
+  
+  @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+  #@requires_auth('patch:drinks')
+  def update_actor(actor_id):
+
+    body = request.get_json()
+    name = body.get('name')
+    age = body.get('age')
+    gender = body.get('gender')
+
+    actor = Actors.query.filter(Actors.id == actor_id).one_or_none()
+
+    if actor is None:
+      abort(404)
+
+    try:
+      actor.name = name
+      actor.age = age
+      actor.gender = gender
+      actor.update()
+
+      return jsonify({
+          "success": True,
+          "actor": [actor.format()]
+        })
+
+    except:
+      abort(422)
+
+
+  @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+  def delete_actor(actor_id):
+    '''
+    An endpoint to DELETE actor using ID. 
+    '''
+    actor = Actors.query.filter(Actors.id == actor_id).one_or_none()
+    if actor is None:
+      abort(422)
+    
+    actor.delete()
+
+    return jsonify({
+      'success': True,  
+      'deleted': actor_id    
+    })
+
 
   #---------------
   # Movies endpoint
@@ -103,9 +149,7 @@ def create_app(test_config=None):
       '''
       POST endpoint to craete new movies which require movie title , release year and main actor
       '''
-      
       body = request.get_json()
-
       title = body.get('title')
       release = body.get('release')
       actor = body.getlist('actor')
@@ -125,6 +169,52 @@ def create_app(test_config=None):
 
       except:
         abort(422)
+
+
+  @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    #@requires_auth('patch:drinks')
+    def update_movie(movie_id):
+
+      body = request.get_json()
+      title = body.get('title')
+      release = body.get('release')
+      actor = body.getlist('actor')
+
+      movie = Movies.query.filter(Movies.id == movie_id).one_or_none()
+
+      if movie is None:
+        abort(404)
+
+      try:
+        movie.title = title
+        movie.release = release
+        movie.actor = actor
+        movie.update()
+
+        return jsonify({
+            "success": True,
+            "movie": [movie.format()]
+          })
+
+      except:
+        abort(422)
+
+
+  @app.route('/actors/<int:movie_id>', methods=['DELETE'])
+  def delete_movie(actor_id):
+    '''
+    An endpoint to DELETE movie using ID. 
+    '''
+    movie = Movies.query.filter(Movies.id == movie_id).one_or_none()
+    if movie is None:
+      abort(422)
+    
+    movie.delete()
+
+    return jsonify({
+      'success': True,  
+      'deleted': actor_id    
+    })
 
 
   #----------------------------------------------------------------------------#
