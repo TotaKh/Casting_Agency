@@ -15,7 +15,6 @@ AuthError Exception
 A standardized way to communicate auth failure modes
 '''
 
-
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -23,11 +22,10 @@ class AuthError(Exception):
 
 
 # Auth Header
-
-
+# -----------------------------------------------------------------------------
+# Defining function to obtain authorization token from request header
 def get_token_auth_header():
-    """Obtains the Access Token from the Authorization Header
-    """
+    '''Obtains access token from the Authoization header'''
     # get the header from the request
     auth = request.headers.get('Authorization', None)
 
@@ -45,16 +43,14 @@ def get_token_auth_header():
     if parts[0].lower() != 'bearer':
         raise AuthError({
             'code': 'invalid_header',
-            'description': 'Authorization header must start with "Bearer".'
+            'description': 'Authoization header must start with "Bearer".'
         }, 401)
-
-    # raise an AuthError if the header is one part
+    # raise an AuthError if the header is one part    
     elif len(parts) == 1:
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Token not found.'
-        }, 401)
-
+        }, 401)    
     # raise an AuthError if the header is more than 2 parts
     elif len(parts) > 2:
         raise AuthError({
@@ -71,7 +67,7 @@ def check_permissions(permission, payload):
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
-            'description': 'Permissions not included in JWT.'
+            'description': 'Permissions not found in JWT.'
         }, 400)
 
     # raise an AuthError if the requested permission string is not in the
@@ -79,7 +75,7 @@ def check_permissions(permission, payload):
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'unauthorized',
-            'description': 'Permission not found.'
+            'description': 'Permission not authorized.'
         }, 403)
 
     return True
@@ -89,9 +85,10 @@ def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
+
     rsa_key = {}
 
-    # aise an AuthError if the Auth0 token is not with key id (kid)
+    # raise an AuthError if the Auth0 token is not with key id (kid)
     if 'kid' not in unverified_header:
         raise AuthError({
             'code': 'invalid_header',
@@ -107,6 +104,7 @@ def verify_decode_jwt(token):
                 'n': key['n'],
                 'e': key['e']
             }
+
     # verify the token using Auth0 /.well-known/jwks.json
     if rsa_key:
         try:
@@ -120,16 +118,16 @@ def verify_decode_jwt(token):
 
             return payload
 
+        # Handling respective error scenarios
         except jwt.ExpiredSignatureError:
             raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired.'
             }, 401)
-
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': 'Incorrect claims.'
             }, 401)
         except Exception:
             raise AuthError({
@@ -138,19 +136,24 @@ def verify_decode_jwt(token):
             }, 400)
     raise AuthError({
         'code': 'invalid_header',
-                'description': 'Unable to find the appropriate key.'
+        'description': 'Unable to find appropriate key.'
     }, 400)
 
 
+# before allowing user to perform any activities.
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-
             token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
+            try:
+                payload = verify_decode_jwt(token)
+            except BaseException:
+                raise AuthError({
+                    'code': 'invalid_token',
+                    'description': 'Token could not be verified.'
+                }, 401)
             check_permissions(permission, payload)
-
             return f(payload, *args, **kwargs)
 
         return wrapper

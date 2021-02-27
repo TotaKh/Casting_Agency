@@ -46,11 +46,12 @@ def create_app(test_config=None):
     '''
     actors = Actors.query.all()
     
-    if actors == 0:
+    if len(actors) == 0:
       abort(404)
    
     return jsonify({
       'success': True,
+      'total_actors': len(actors),
       'actors': [actor.format() for actor in actors]
     })  
   
@@ -67,7 +68,7 @@ def create_app(test_config=None):
     age = body.get('age')
     gender = body.get('gender')
 
-    if (name == ''):
+    if name == '':
       abort(422)
 
     try:
@@ -76,7 +77,7 @@ def create_app(test_config=None):
 
       return jsonify({
         'success': True,
-        'created': actor.id,
+        'created': actor.format()
       })
 
     except:
@@ -105,7 +106,7 @@ def create_app(test_config=None):
 
       return jsonify({
           "success": True,
-          "actor": [actor.format()]
+          "update actor": actor.format()
         })
 
     except:
@@ -141,11 +142,12 @@ def create_app(test_config=None):
     '''
     movies = Movies.query.all()
     
-    if movies == 0:
+    if len(movies) == 0:
       abort(404)
     
     return jsonify({
       'success': True,
+      'total_movies': len(movies),      
       'movies': [movie.format() for movie in movies]
     })  
 
@@ -171,7 +173,7 @@ def create_app(test_config=None):
 
       return jsonify({
         'success': True,
-        'created': movie.id,
+        'created': movie.format()
       })
 
     except:
@@ -200,16 +202,16 @@ def create_app(test_config=None):
 
       return jsonify({
           "success": True,
-          "movie": [movie.format()]
+          "update movie": movie.format()
         })
 
     except:
       abort(422)
 
 
-  @app.route('/actors/<int:movie_id>', methods=['DELETE'])
+  @app.route('/movies/<int:movie_id>', methods=['DELETE'])
   @requires_auth('delete:movie')
-  def delete_movie(jwt, actor_id):
+  def delete_movie(jwt, movie_id):
     '''
     An endpoint to DELETE movie using ID. 
     '''
@@ -221,7 +223,7 @@ def create_app(test_config=None):
 
     return jsonify({
       'success': True,  
-      'deleted': actor_id    
+      'deleted': movie_id    
     })
 
 
@@ -314,3 +316,9 @@ if __name__ == '__main__':
 # Executive Producer
 # All permissions a Casting Director has and… 
 # Add or delete a movie from the database (post:movie , delete:movie)
+
+
+# Tests:
+# One test for success behavior of each endpoint
+# One test for error behavior of each endpoint
+# At least two tests of RBAC for each role

@@ -35,7 +35,7 @@ class Movies(db.Model):
   release = Column(String)
   actor = Column(String , ForeignKey('actors.name'))
 
-  def __init__(self, title, release ,actor='' ):
+  def __init__(self, title, release='' ,actor='' ):
     self.title = title
     self.release = release
     self.actor = actor
@@ -74,7 +74,7 @@ class Actors(db.Model):
   gender = Column(String)
   movie = db.relationship('Movies' , backref='movie', lazy=True)
 
-  def __init__(self, name, age,gender ):
+  def __init__(self, name, age='', gender='' ):
     self.name = name
     self.age = age
     self.gender = gender
