@@ -2,7 +2,7 @@
 # Imports
 
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
@@ -31,8 +31,8 @@ def create_app(test_config=None):
   #  Endpoint
 
   @app.route('/')
-  def hi():
-    return "hello world"
+  def hello():
+    return render_template('index.html')
 
 
   #---------------
@@ -290,35 +290,3 @@ if __name__ == '__main__':
   app.run(host='0.0.0.0', port=8080, debug=True)
 
 
-
-# Models:
-
-# Movies with attributes title and release date
-# Actors with attributes name, age and gender
-
-# Endpoints:
-# GET /actors and /movies
-# DELETE /actors/ and /movies/
-# POST /actors and /movies and
-# PATCH /actors/ and /movies/
-
-
-# Roles:
-
-# Casting Assistant
-# Can view actors and movies (get:actor , get:movie)
-
-# Casting Director
-# All permissions a Casting Assistant has and…
-# Add or delete an actor from the database (post:actor , delete:actor)
-# Modify actors or movies (patch:actor , patch:movie)
-
-# Executive Producer
-# All permissions a Casting Director has and… 
-# Add or delete a movie from the database (post:movie , delete:movie)
-
-
-# Tests:
-# One test for success behavior of each endpoint
-# One test for error behavior of each endpoint
-# At least two tests of RBAC for each role

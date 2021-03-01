@@ -6,6 +6,7 @@ This is the last project in Full Stack nanodegree I learned a lot with Udacity a
 
 ## Casting Agency
 The Casting Agency models a company that is responsible for creating movies and managing and assigning actors to those movies. creating a system to simplify and streamline the process for all of company members.
+
 The system can:
 1. Retrieve data for both actors and movies
 2. Inserting a new actor or movie into the database
@@ -15,11 +16,11 @@ The system can:
 ### hosted on ...
 
 
-### Authentication
+### Authentication 
 There are 3 roles for system users each of them has permissions. 
 These are their login information:
 
-1. Executive Producer
+#### 1. Executive Producer
 ```bash
 email: ExecutiveProducer@agency.com
 password: Qwer1234
@@ -37,8 +38,10 @@ password: Qwer1234
     - `patch:actor`
     - `patch:movie`
 
+You can log in and create your token [here](https://khalawi.us.auth0.com/authorize?audience=Agency&response_type=token&client_id=PwUwrDo6fgOm80xj1XkR0oSdcVlaGcZq&redirect_uri=http://localhost:8080/login
+)
 
-2. Casting Director
+#### 2. Casting Director
 ```bash
 email: Director@agency.com
 password: Qwer1234
@@ -54,7 +57,8 @@ password: Qwer1234
     - `patch:movie`
 
 
-3. Casting Assistant
+
+#### 3. Casting Assistant
 ```bash
 email: Assistant@agency.com
 password: Qwer1234
@@ -107,6 +111,7 @@ createdb Casting_Agency
 psql Casting_Agency < Casting_Agency.psql
 ```
 
+
 #### Running the server
 From within the directory first ensure you are working using your created virtual environment. Base URL is: http://127.0.0.1:5000/
 
@@ -131,7 +136,6 @@ Errors status codes that could occur when requests fail:
 
 - 400 (Bad Request)
 - 401 (Unauthorized)
-- 403 (Forbidden response)
 - 404 (resource not found)
 - 405 (method not allowed)
 - 422 (unprocessable)
@@ -169,6 +173,198 @@ This test focuses on authentication and permissions for each role.
 
 List of all endpoints in the project:
 
-1. 
+1. GET `'/actors'`
+2. POST `'/actors'`
+3. PATCH `'/actors/<int:actor_id>'`
+4. DELETE `'/actors/<int:actor_id>'`
+5. GET `'/movies'`
+6. POST `'/movies'`
+7. PATCH `'/movies/<int:movie_id>'`
+8. DELETE `'/movies/<int:movie_id>'`
 
+
+### 1. GET `'/actors'`
+- Retrieve all actors and their info with the total number of actors.
+- Request Arguments: None
+- Returns: 
+```
+{
+    "actors": [
+        {
+            "age": 17,
+            "gender": "Female",
+            "id": 1,
+            "name": "Millie Brown"
+        },
+        {
+            "age": 37,
+            "gender": "Male",
+            "id": 2,
+            "name": "Jesse Eisenberg"
+        },
+        {
+            "age": 55,
+            "gender": "Male",
+            "id": 3,
+            "name": "Robert Downey"
+        },
+        {
+            "age": 46,
+            "gender": "Male",
+            "id": 4,
+            "name": "Leonardo DiCaprio"
+        }
+    ],
+    "success": true,
+    "total_actors": 4
+```
+
+### 2. POST `'/actors'`
+- add new actor to the database.
+- Request Arguments: 
+```
+{
+    "age": 45,
+    "gender": "Female",
+    "name": "Angelina Jolie"
+}
+```
+- Returns:
+```
+"created": {
+        "age": 45,
+        "gender": "Female",
+        "id": 22,
+        "name": "Angelina Jolie"
+    },
+    "success": true
+```
+
+### 3. PATCH `'/actors/<int:actor_id>'`
+- update a specific actor info.
+- Request Arguments: int:actor_id
+```
+{
+    "age": 33,
+    "gender": "Female",
+    "name": "Blake Lively"
+}
+```
+- Returns:
+```
+{
+    "success": true,
+    "update actor": {
+        "age": 33,
+        "gender": "Female",
+        "id": 20,
+        "name": "Blake Lively"
+    }
+}
+```
+
+### 4. DELETE `'/actors/<int:actor_id>'`
+- delet a specific actor from database.
+- Request Arguments: int:actor_id
+- Returns:
+```
+{
+    "deleted": 19,
+    "success": true
+}
+```
+
+### 5. GET `'/movies'`
+- Retrieve all movies and their info with the total number of movies.
+- Request Arguments: None
+- Returns: 
+```
+{
+    "movies": [
+        {
+            "actor": "Millie Brown",
+            "id": 1,
+            "release": "2020",
+            "title": "Enola Holmes"
+        },
+        {
+            "actor": "Jesse Eisenberg",
+            "id": 2,
+            "release": "2013",
+            "title": "Now You See Me"
+        },
+        {
+            "actor": "Robert Downey",
+            "id": 3,
+            "release": "2008",
+            "title": "Iron Man"
+        },
+        {
+            "actor": "Leonardo DiCaprio",
+            "id": 4,
+            "release": "2013",
+            "title": "The Great Gatsby"
+        }
+    ],
+    "success": true,
+    "total_movies": 4
+
+```
+
+### 6. POST `'/movies'`
+- add new movie to the database.
+- Request Arguments: 
+```
+{
+    "title" : "Maleficent",
+    "release" : "2019",
+    "actor": "Angelina Jolie"
+}
+```
+- Returns:
+```
+{
+    "created": {
+        "actor": "Angelina Jolie",
+        "id": 15,
+        "release": "2019",
+        "title": "Maleficent"
+    },
+    "success": true
+}
+```
+
+### 7. PATCH `'/movies/<int:movie_id>'`
+- update a specific movie info.
+- Request Arguments: int:movie_id
+```
+{
+    "title" : "A Simple Favor",
+    "release" : 2018,
+    "actor": "Blake Lively"
+}
+```
+- Returns:
+```
+{
+    "success": true,
+    "update movie": {
+        "actor": "Blake Lively",
+        "id": 11,
+        "release": "2018",
+        "title": "A Simple Favor"
+    }
+}
+```
+
+### 8. DELETE `'/movies/<int:movie_id>'`
+- delet a specific movie from database.
+- Request Arguments: int:movie_id
+- Returns:
+```
+{
+    "deleted": 10,
+    "success": true
+}
+```
 
