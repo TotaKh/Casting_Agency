@@ -167,7 +167,6 @@ This test focuses on authentication and permissions for each role.
 - Import the postman collection ` test_casting_agency`
 - Run the collection.
 
----------------------------
 
 ## API Endpoints 
 
