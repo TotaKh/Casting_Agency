@@ -15,6 +15,7 @@ AuthError Exception
 A standardized way to communicate auth failure modes
 '''
 
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -45,12 +46,12 @@ def get_token_auth_header():
             'code': 'invalid_header',
             'description': 'Authoization header must start with "Bearer".'
         }, 401)
-    # raise an AuthError if the header is one part    
+    # raise an AuthError if the header is one part
     elif len(parts) == 1:
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Token not found.'
-        }, 401)    
+        }, 401)
     # raise an AuthError if the header is more than 2 parts
     elif len(parts) > 2:
         raise AuthError({

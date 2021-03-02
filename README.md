@@ -108,7 +108,7 @@ With Postgres running, restore a database using the trivia.psql file provided. F
 ```bash
 dropdb Casting_Agency
 createdb Casting_Agency
-psql Casting_Agency < Casting_Agency.psql
+psql Casting_Agency < Casting_Agency.pgsql
 ```
 
 
@@ -119,8 +119,6 @@ To run the server execute:
 
 ```bash
 export FLASK_APP=app
-export FLASK_DEBUG=True
-export FLASK_ENVIRONMENT=debug
 flask run --reload
 ```
 
@@ -157,8 +155,8 @@ To run the tests and execute:
 ```
 dropdb Casting_Agency_test
 createdb Casting_Agency_test
-psql Casting_Agency_test < Casting_Agency.psql
-python3 .py
+psql Casting_Agency_test < Casting_Agency.pgsql
+python3 test_app.py
 ```
 
 #### Test using Postman

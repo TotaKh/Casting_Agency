@@ -20,7 +20,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "Casting_Agency_test"
-        self.database_path = os.getenv('DATABASE_URL_TEST')
+        self.database_path = "postgres://{}/{}".format('localhost:5432', "Casting_Agency_test")
         setup_db(self.app, self.database_path)
 
 
@@ -51,7 +51,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   post Actor
     def test_200_post_Actor_Director(self):
-        res = self.client().post('/actors', headers=Director_token, json={'name':'actor100'})
+        res = self.client().post('/actors', headers=Director_token, json={'name':'actor100'})# id is 11
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -68,7 +68,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   patch Actor
     def test_200_patch_Actor_Director(self):
-        res = self.client().patch('/actors/2', headers=Director_token, json={'name':'Actor'})
+        res = self.client().patch('/actors/11', headers=Director_token, json={'name':'Actor'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -86,7 +86,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   delete Actor
     def test_200_delete_Actor_Director(self):
-        res = self.client().delete('/actors/1', headers=Director_token)
+        res = self.client().delete('/actors/11', headers=Director_token)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -115,7 +115,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   post Movie
     def test_200_post_Movie_Producer(self):
-        res = self.client().post('/movies', headers=Producer_token ,json={'title':'movie'})
+        res = self.client().post('/movies', headers=Producer_token ,json={'title':'movie'})# id is 11
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -132,7 +132,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   patch Movie
     def test_200_patch_Movie_Director(self):
-        res = self.client().patch('/movies/2', headers=Director_token ,json={'title':'movie'})
+        res = self.client().patch('/movies/11', headers=Director_token ,json={'title':'movie'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -149,7 +149,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   delete Movie
     def test_200_delete_Movie_Producer(self):
-        res = self.client().delete('/movies/1', headers=Producer_token)
+        res = self.client().delete('/movies/11', headers=Producer_token)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)

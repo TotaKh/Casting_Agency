@@ -1,7 +1,4 @@
-export DATABASE_URL='postgresql://taghreed:122333@localhost:5432/Casting_Agency'
-export DATABASE_URL_TEST='postgresql://taghreed:122333@localhost:5432/Casting_Agency_test'
-# export DATABASE_URI='postgres://localhost:5432/casting_agency'
-# export DATABASE_URL_TEST='postgres://localhost:5432/casting_agency_test'
+export DATABASE_URL='postgres://qxelfcvzjfqngx:beb2f4efc2a25932dc654ce8121295940c371883c8e45041dac1ffbc1298173e@ec2-18-207-95-219.compute-1.amazonaws.com:5432/d9q2lc1l8ig55'
 
 export FLASK_APP=app
 export FLASK_DEBUG=True
