@@ -40,8 +40,6 @@ password: Qwer1234
     - `patch:actor`
     - `patch:movie`
 
-You can log in and create your token [here](https://khalawi.us.auth0.com/authorize?audience=Agency&response_type=token&client_id=PwUwrDo6fgOm80xj1XkR0oSdcVlaGcZq&redirect_uri=http://localhost:8080/login
-)
 
 #### 2. Casting Director
 ```bash
@@ -68,6 +66,10 @@ password: Qwer1234
 -  Can view actors and movies
     - `get:actor`
     - `get:movie`
+
+
+You can log in and create your token [here](https://khalawi.us.auth0.com/authorize?audience=Agency&response_type=token&client_id=PwUwrDo6fgOm80xj1XkR0oSdcVlaGcZq&redirect_uri=http://localhost:8080/login
+)
 
 
 ## Getting Started Locally
