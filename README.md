@@ -70,7 +70,7 @@ password: Qwer1234
     - `get:movie`
 
 
-## Getting Started
+## Getting Started Locally
 
 ### Installing Dependencies
 
@@ -82,7 +82,7 @@ Follow instructions to install the latest version of python for your platform in
 
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
-#### PIP Dependencies
+#### PIP Dependencies 
 
 Once you have your virtual environment setup and running, install dependencies by execute:
 
@@ -92,6 +92,10 @@ pip install -r requirements.txt
 
 This will install all of the required packages we selected within the `requirements.txt` file.
 
+export the environment variables for the project in `setup.sh` by execute:
+```bash
+source ./setup.sh 
+```
 
 #### Key Dependencies
 
@@ -104,7 +108,7 @@ This will install all of the required packages we selected within the `requireme
 - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
 
 
-#### Database Setup localy 
+### Database Setup 
 to run the API localy comment line 7 on models.py and un comment line 8,9 :
 
 ```bash
@@ -122,7 +126,7 @@ psql Casting_Agency < Casting_Agency.pgsql
 ```
 
 
-#### Running the server
+### Running the server
 From within the directory first ensure you are working using your created virtual environment. Base URL is: http://127.0.0.1:5000/
 
 To run the server execute:
