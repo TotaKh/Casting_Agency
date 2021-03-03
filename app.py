@@ -183,7 +183,7 @@ def create_app(test_config=None):
                 'created': movie.format()
             })
 
-        except BaseException:
+        except:
             abort(422)
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])

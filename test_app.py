@@ -51,7 +51,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   post Actor
     def test_200_post_Actor_Director(self):
-        res = self.client().post('/actors', headers=Director_token, json={'name':'actor100'})# id is 11
+        res = self.client().post('/actors', headers=Director_token, json={'name':'actor99'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -68,7 +68,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   patch Actor
     def test_200_patch_Actor_Director(self):
-        res = self.client().patch('/actors/11', headers=Director_token, json={'name':'Actor'})
+        res = self.client().patch('/actors/11', headers=Director_token, json={'name':'Actor', 'age':20, 'gender':'Male'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -84,9 +84,9 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'resource not found')
 
 
-    #   delete Actor
+    #  delete Actor
     def test_200_delete_Actor_Director(self):
-        res = self.client().delete('/actors/11', headers=Director_token)
+        res = self.client().delete('/actors/9', headers=Director_token)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -115,7 +115,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   post Movie
     def test_200_post_Movie_Producer(self):
-        res = self.client().post('/movies', headers=Producer_token ,json={'title':'movie'})# id is 11
+        res = self.client().post('/movies', headers=Producer_token ,json={'title':'movie'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -132,7 +132,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     #   patch Movie
     def test_200_patch_Movie_Director(self):
-        res = self.client().patch('/movies/11', headers=Director_token ,json={'title':'movie'})
+        res = self.client().patch('/movies/10', headers=Director_token ,json={'title':'movie'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -147,9 +147,9 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False) 
         self.assertEqual(data['message'], 'resource not found')
 
-    #   delete Movie
+    #  delete Movie
     def test_200_delete_Movie_Producer(self):
-        res = self.client().delete('/movies/11', headers=Producer_token)
+        res = self.client().delete('/movies/9', headers=Producer_token)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)

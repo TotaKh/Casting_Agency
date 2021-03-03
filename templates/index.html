@@ -2,18 +2,35 @@
 <html lang="en">
     <head>
         <meta http-equiv="refresh" content="60">
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <title>Casting Agency</title>
         <style>
-
+            .login {
+                padding: 15px;
+                margin: 80px;
+                
+            }
+            body {
+                align-items: center;
+                padding-top: 80px;
+                padding-bottom: 40px;
+            }
         </style>
     </head>
-    <body>
-
-        <h3>Welcome to Casting Agency API</h3>
-        <div class="buttons">
-        <a id="loginButton" href="https://khalawi.us.auth0.com/authorize?audience=Agency&response_type=token&client_id=PwUwrDo6fgOm80xj1XkR0oSdcVlaGcZq&redirect_uri=http://localhost:8080/login
-        " > Log in </a>
+    <body class="text-center">
+        <div class="lonin">
+            
+            <img src="http://127.0.0.1:5000/director-chair.png" class="mx-auto d-block" alt="..">
+            <br>
+            <h3>Welcome to Casting Agency API</h3>
+            <br>
+            <br>
+            <h5>Please Log in</h5>
+            <br>
+            <div>
+                <a class="btn btn-lg btn-primary" id="loginButton" href="https://khalawi.us.auth0.com/authorize?audience=Agency&response_type=token&client_id=PwUwrDo6fgOm80xj1XkR0oSdcVlaGcZq&redirect_uri=http://localhost:8080/login
+                    " > Log in </a>
+            </div>
         </div>
     </body>
 </html>

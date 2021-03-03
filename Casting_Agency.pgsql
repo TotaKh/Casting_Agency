@@ -132,6 +132,7 @@ COPY public.actors (id, name, age, gender) FROM stdin;
 8	Will Smith	52	Male
 9	Yifei Liu	33	Female
 10	Anna Kendrick	35	Female
+11	Dylan OBrien	29	Mele
 \.
 
 
