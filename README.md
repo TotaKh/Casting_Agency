@@ -13,7 +13,9 @@ The system can:
 3. Modify the data of both actors and films
 4. Delete an actor or movie from the database
 
-### hosted on ...
+### hosted on
+
+https://khalawicastingagency.herokuapp.com
 
 
 ### Authentication 
@@ -102,7 +104,15 @@ This will install all of the required packages we selected within the `requireme
 - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
 
 
-#### Database Setup
+#### Database Setup localy 
+to run the API localy comment line 7 on models.py and un comment line 8,9 :
+
+```bash
+# database_path = os.environ['DATABASE_URL']
+database_name = "Casting_Agency"
+database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+```
+
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
 
 ```bash
